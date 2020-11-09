@@ -1,0 +1,21 @@
+version: '3'
+services:
+  db:
+    image: redis
+    container_name: redisDB
+    expose:
+      - 6379
+  app:
+    build: .
+    container_name: wooconn
+    restart: on-failure
+    environment:
+      REDIS_HOST: db
+      REDIS_PORT: 6379
+      GIN_MODE: release
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    links:
+      - db
