@@ -2,12 +2,14 @@ version: '3'
 services:
   db:
     image: redis
-    container_name: redisDB
+    container_name: weeconn_db
+    volumes:
+      - ./redis-volume:/data
     expose:
       - 6379
   app:
     build: .
-    container_name: wooconn
+    container_name: weeconn
     restart: on-failure
     environment:
       REDIS_HOST: db
