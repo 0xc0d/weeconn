@@ -1,8 +1,17 @@
 version: '3'
 services:
-  db:
+  influx:
+    image: influxdb
+    container_name: weeconn_stat
+    restart: always
+    volumes:
+      - ./influxdb-volume:/var/lib/influxdb
+    expose:
+      - 8086
+  redis:
     image: redis
     container_name: weeconn_db
+    restart: always
     volumes:
       - ./redis-volume:/data
     expose:
@@ -12,12 +21,17 @@ services:
     container_name: weeconn
     restart: on-failure
     environment:
-      REDIS_HOST: db
+      INFLUX_HOST: influx
+      INFLUX_PORT: 8086
+      INFLUX_DB: _internal
+      REDIS_HOST: redis
       REDIS_PORT: 6379
       GIN_MODE: release
     ports:
       - 8080:8080
     depends_on:
-      - db
+      - redis
+      - influx
     links:
-      - db
+      - redis
+      - influx

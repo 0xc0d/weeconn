@@ -22,6 +22,9 @@ func NewRouter() *gin.Engine {
 	{
 		health := new(controllers.HealthController)
 		statusGroup.HEAD("/health", health.Status)
+
+		seen := new(controllers.StatisticsController)
+		statusGroup.POST("/id", seen.Stat)
 	}
 
 	return router

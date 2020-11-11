@@ -11,10 +11,11 @@ type RedirectController struct{}
 
 func (s *RedirectController) Redirect(c *gin.Context) {
 	id := c.Param("id")
-
 	value, err := models.GetUrlByID(id)
+
 	switch err {
 	case nil:
+		models.Seen(id)
 	case models.Nil:
 		c.JSON(http.StatusNotFound, gin.H{"error": "link not found"})
 		return

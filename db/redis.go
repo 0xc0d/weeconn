@@ -7,18 +7,20 @@ import (
 	"sync"
 )
 
-var once sync.Once
-var rdb *redis.Client
+var newRedis struct {
+	once   sync.Once
+	client *redis.Client
+}
 
 func NewRedisClient() *redis.Client {
-	once.Do(func() {
-		rdb = redis.NewClient(&redis.Options{
-			Addr:     config.Redis.Addr(),
-			Username: config.Redis.User,
-			Password: config.Redis.Pass,
+	newRedis.once.Do(func() {
+		newRedis.client = redis.NewClient(&redis.Options{
+			Addr:     config.Redis.Host,
+			Username: config.Redis.Username,
+			Password: config.Redis.Password,
 		})
 
-		log.Printf("Connecting to Redis at %s", config.Redis.Addr())
+		log.Printf("Connecting to Redis at %s", config.Redis.Host)
 	})
-	return rdb
+	return newRedis.client
 }
