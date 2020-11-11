@@ -32,7 +32,7 @@ API to create a 7-Length ID for a given URL.
  
 * **Error Response:**  
 
-    **Code:** `400 BAD REQUEST`; **Content:** `{ error : "bad url" }`
+    **Code:** `400 BAD REQUEST`; **Content:** `{"error": "bad url"}`
 
     OR
 
